@@ -24,7 +24,16 @@ macOS จะถามสิทธิ์ ("RxWidget wants to use … Claude Code-
 และอาจถามซ้ำทุกครั้งที่ rebuild แล้ว signature เปลี่ยน
 ทางเลือก: เรียก `/usr/bin/security find-generic-password -s … -w` ซึ่งมักอยู่ใน ACL อยู่แล้ว → ต้องทดสอบจริง
 
-สถานะ: **รอยืนยันบนเครื่องจริง**
+ผลบนเครื่องจริง (2026-11-17):
+- มี item `Claude Code-credentials` จริง, top-level keys: `mcpOAuth`, `claudeAiOauth`
+- fields: `accessToken` str, `refreshToken` str, `expiresAt` int, `refreshTokenExpiresAt` int, `scopes` list, `subscriptionType` str (`team`), `rateLimitTier` str
+- ไม่มี `~/.claude/.credentials.json`
+- ⚠️ `expiresAt = 0` → ยังไม่รู้ว่าแปลว่าอะไร (บั๊ก token ถูกล้าง? หรือใช้ token จากที่อื่น?) ต้องตรวจด้วย `scripts/probe_providers.py`
+
+## 3. Codex auth (เครื่องจริง)
+
+- `~/.codex/auth.json`: `auth_mode` str, `OPENAI_API_KEY` null, `tokens` {`id_token`, `access_token`, `refresh_token`, `account_id`}, `last_refresh` str
+- rollout files: 8 ไฟล์
 
 ## 2. ยอดคงเหลือของ OpenAI API
 
