@@ -67,6 +67,52 @@ def claude():
     }))
 
 
+def claude_all_items():
+    """ไล่ดูทุก item 'Claude Code-credentials*' ว่าอันไหนมี token ใช้ได้ (ไม่พิมพ์ token)"""
+    import hashlib
+    import re
+    print("\n== Claude Code-credentials* ทั้งหมด ==")
+    dump = subprocess.run(["/usr/bin/security", "dump-keychain"], capture_output=True, text=True).stdout
+    names = sorted(set(re.findall(r'"svce"<blob>="(Claude Code-credentials[^"]*)"', dump)))
+    now_ms = datetime.now(timezone.utc).timestamp() * 1000
+    best = None
+    for name in names:
+        attrs = subprocess.run(["/usr/bin/security", "find-generic-password", "-s", name],
+                               capture_output=True, text=True).stdout
+        mdat = re.search(r'"mdat"<timedate>=0x[0-9A-F]+\s+"(\d{14})', attrs)
+        acct = re.search(r'"acct"<blob>="([^"]*)"', attrs)
+        raw = subprocess.run(["/usr/bin/security", "find-generic-password", "-s", name, "-w"],
+                             capture_output=True, text=True).stdout
+        try:
+            o = json.loads(raw).get("claudeAiOauth", {}) or {}
+        except json.JSONDecodeError:
+            o = {}
+        tok = o.get("accessToken") or ""
+        exp = o.get("expiresAt") or 0
+        valid = bool(tok) and exp > now_ms
+        print(f"  {name:45} acct={acct.group(1) if acct else '?':12} "
+              f"mdat={mdat.group(1) if mdat else '?'} tok={len(tok):4} "
+              f"exp={ts(exp)[-32:] if exp else '0'} sub={o.get('subscriptionType')} "
+              f"{'✅' if valid else ''}")
+        if valid and (best is None or exp > best[1]):
+            best = (name, exp, tok)
+
+    # เดาที่มาของ suffix: sha256(config dir)[:8] ?
+    for d in filter(None, [os.path.expanduser("~/.claude"), os.environ.get("CLAUDE_CONFIG_DIR")]):
+        h = hashlib.sha256(d.encode()).hexdigest()[:8]
+        print(f"  sha256('{d}')[:8] = {h} → {'ตรง' if any(n.endswith(h) for n in names) else 'ไม่ตรง'}")
+
+    if best:
+        print(f"\n  ใช้ token จาก {best[0]} ทดสอบ /api/oauth/usage")
+        show(*get("https://api.anthropic.com/api/oauth/usage", {
+            "Authorization": f"Bearer {best[2]}",
+            "anthropic-beta": "oauth-2025-04-20",
+            "User-Agent": "rxwidget-probe/0.1",
+        }))
+    else:
+        print("  ไม่มี item ไหนมี token ที่ยังไม่หมดอายุ")
+
+
 def codex():
     print("\n== Codex (ChatGPT plan) ==")
     path = os.path.expanduser("~/.codex/auth.json")
@@ -103,4 +149,5 @@ def codex():
 
 if __name__ == "__main__":
     claude()
+    claude_all_items()
     codex()

@@ -32,6 +32,9 @@ macOS จะถามสิทธิ์ ("RxWidget wants to use … Claude Code-
   `refreshTokenExpiresAt` = 2026-09-02 (หมดอายุแล้ว) → ตรงกับบั๊ก token ถูกล้าง
 - `subscriptionType = team`, `rateLimitTier = default_raven`, scopes มี `user:profile`, `user:inference`, `user:sessions:claude_code`
 - ยังไม่รู้ว่า Claude Code ตอนนี้ login อยู่หรือไม่ และถ้า login อยู่ token อยู่ที่ไหน → ต้องตรวจต่อ
+- `security dump-keychain` พบ item `Claude Code-credentials-<8 hex>` อีก 27 ตัว + `Claude Code-credentials` (ไม่มี suffix)
+  - สมมติฐาน (ยังไม่ยืนยัน): suffix มาจาก hash ของ config dir ที่ไม่ใช่ค่า default เช่น session ของ Claude desktop/Cowork
+  - `probe_providers.py` ไล่ดูทุก item เพื่อหาว่าตัวไหนมี token ที่ใช้ได้
 - สิ่งที่แอปต้องรองรับ: item มีอยู่แต่ token ว่าง → สถานะ "ต้อง login Claude Code ใหม่" (แยกจาก "ข้อมูลเก่า")
 
 ## 3. Codex (เครื่องจริง)
