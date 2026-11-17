@@ -19,6 +19,7 @@
 - `changelog.md` ไฟล์นี้
 - 2026-11-17: `docs/research-providers.md` ผล research ตำแหน่ง token ของ Claude Code (Keychain `Claude Code-credentials`) และยืนยันว่า OpenAI ไม่มี endpoint ยอดคงเหลือ → ใช้ Costs API
 - 2026-11-17: บันทึกโครงสร้าง credential จริงของ Claude Code และ Codex ใน `docs/research-providers.md`
+- 2026-11-17: บันทึกผล probe หลัง login Claude Code: token อยู่ใน `Claude Code-credentials`, `/api/oauth/usage` ใช้ได้ พร้อมตัวอย่าง response และข้อสังเกตการ decode
 - 2026-11-17: บันทึกผล `claude doctor`/`/status`: CLI ยังไม่ได้ login (Expired) จึงยังสรุปไม่ได้ว่าเป็นบั๊ก Keychain
 - 2026-11-17: บันทึกผล probe รอบสาม: login Claude Code ใหม่แล้วแต่ Keychain ไม่ถูกเขียน พร้อมอ้างอิงบั๊กที่เกี่ยวข้อง
 - 2026-11-17: บันทึกผล probe รอบสอง: `wham/usage` ใช้ได้ (ตัวอย่าง response ตัด id/email), token Claude Code ว่างทั้ง 28 Keychain item

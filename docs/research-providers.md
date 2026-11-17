@@ -44,6 +44,31 @@ macOS จะถามสิทธิ์ ("RxWidget wants to use … Claude Code-
   บางแหล่งบอกว่าจะ fallback ไป `~/.claude/.credentials.json` แต่บางรายงานบอกว่าไม่สร้างไฟล์นั้นด้วย
 - ตรวจเพิ่ม (Claude Code 2.1.326): `/status` แสดง `Login: Expired — log in again`, `claude doctor` แสดง "Not signed in to claude.ai",
   login keychain ไม่ได้ล็อก (`no-timeout`) → **ยังไม่ได้ login สำเร็จใน CLI จริง** จึงยังสรุปไม่ได้ว่าเป็นบั๊ก Keychain
+- หลัง `claude auth login` สำเร็จ (`/status` = Claude Team account): item `Claude Code-credentials` (ไม่มี suffix) **มี token แล้ว**
+  - access token prefix `sk-ant-oat`, ยาว 108; refresh token ยาว 108
+  - `expiresAt` ห่างจากเวลาเขียน ~8 ชั่วโมง, `refreshTokenExpiresAt` ~27 วัน (ทั้งคู่ epoch ms)
+  - scopes เพิ่ม `user:plugins`, `user:privacy_consents:write`
+  - item ที่มี suffix ทั้ง 27 ตัวยังว่าง → ไม่ใช้ อ่านเฉพาะ `Claude Code-credentials`
+- **`/api/oauth/usage` ใช้ได้ (HTTP 200)** ตัวอย่าง (ตัดฟิลด์ codename ที่เป็น null ออก):
+  ```json
+  { "five_hour": { "utilization": 15.0, "resets_at": "2026-11-17T09:29:59.796877+00:00",
+                   "limit_dollars": null, "used_dollars": null, "remaining_dollars": null, "locked_reason": null },
+    "seven_day": { "utilization": 71.0, "resets_at": "2026-11-18T12:59:59.796899+00:00", "...": null },
+    "seven_day_opus": null, "seven_day_sonnet": null, "seven_day_cowork": null,
+    "extra_usage": { "is_enabled": false, "monthly_limit": null, "used_credits": null, "currency": null, "...": null },
+    "limits": [
+      { "kind": "session",       "group": "session", "percent": 15, "severity": "normal", "resets_at": "…", "scope": null, "is_active": false },
+      { "kind": "weekly_all",    "group": "weekly",  "percent": 71, "severity": "normal", "resets_at": "…", "scope": null, "is_active": true },
+      { "kind": "weekly_scoped", "group": "weekly",  "percent": 0,  "severity": "normal", "resets_at": "2026-11-18T13:00:00+00:00",
+        "scope": { "model": { "id": null, "display_name": "Fable" }, "surface": null }, "is_active": false } ],
+    "spend": { "used": { "amount_minor": 0, "currency": "USD", "exponent": 2 }, "limit": null, "percent": 0,
+               "severity": "normal", "enabled": false, "balance": null },
+    "weekly_scoped_shares": [ { "limit_index": 2, "used_percent_of_weekly": 0, "allowance_percent_of_weekly": 50 } ] }
+  ```
+  - มี 2 รูปแบบซ้อนกัน: แบบเก่า (`five_hour`/`seven_day`, `utilization` double) และ `limits[]` (`percent` int, มี `severity`, `scope` ราย model)
+  - มีฟิลด์ชื่อ codename จำนวนมาก (เช่น `tangelo`, `amber_gauge`) เป็น null → decode แบบไม่สนใจ key ที่ไม่รู้จัก
+  - `resets_at` เป็น ISO 8601 มีทั้งแบบเศษวินาที 6 หลักและไม่มีเศษวินาที → parser ต้องรองรับทั้งสองแบบ
+  - เงินใช้ `amount_minor` + `exponent` (ไม่ใช่ float)
 - ผลต่อการออกแบบ: ต้องอ่านทั้ง Keychain และ `~/.claude/.credentials.json` และแสดงสาเหตุให้ชัดเมื่อไม่มี token
 - ผลต่อการออกแบบ: rxwidget ไม่ refresh เอง → ข้อมูล Claude จะสดเฉพาะช่วงที่ Claude Code CLI ถูกใช้และ refresh token ให้
 - สิ่งที่แอปต้องรองรับ: item มีอยู่แต่ token ว่าง → สถานะ "ต้อง login Claude Code ใหม่" (แยกจาก "ข้อมูลเก่า")
