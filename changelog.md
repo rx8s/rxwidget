@@ -6,6 +6,7 @@
 ## [Unreleased]
 
 ### เพิ่ม
+- 2026-11-17: `docs/img2.png` ภาพหน้าจอเมนูบน menu bar แสดงคู่กับภาพหน้าต่างลอยใน `readme.md`
 - 2026-11-17: `img.png` ภาพหน้าจอตัวอย่าง (หน้าต่างลอย) แสดงใต้หัวเรื่องใน `readme.md`
 - 2026-11-17: `LICENSE` แบบ MIT (© 2026 rx8s) และหัวข้อ License ใน `readme.md`
 - 2026-11-17: ธีมสี (`Shared/Theme.swift`): สีประจำ provider (จุดหน้าชื่อ + แถบด้านซ้าย), แถบ % ไล่สีเขียว→เหลือง→ส้ม→แดง พร้อมตัวเลข % สีตามระดับ, พื้นหลังการ์ดไล่สีโปร่งๆ ในหน้าต่างลอยและ widget
@@ -33,6 +34,7 @@
   - `Shared/UsageViews.swift` view ชั่วคราวใช้ร่วมกันระหว่าง menu และ widget (ออกแบบจริงภายหลัง)
 
 ### เปลี่ยนแปลง
+- 2026-11-17: ย้าย `img.png` ไปไว้ที่ `docs/img.png` และอัปเดต path ใน `readme.md`
 - 2026-11-17: แก้ลิงก์ commit โค้ด iOS เดิมใน `docs/spike-ios.md` และ changelog จาก `43cf98f` เป็น `034845f` (รหัส commit เปลี่ยนหลังเขียนประวัติใหม่)
 - 2026-11-17: แทน bundle prefix จริงด้วย `<BUNDLE_ID_PREFIX>` ใน `docs/spike-ios.md`
 - 2026-11-17: แทน Team ID จริงด้วย `<TEAMID>` ใน `changelog.md`, `docs/spike-app-group.md`, `docs/spike-ios.md` เตรียมเปิด repo เป็น public

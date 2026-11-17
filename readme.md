@@ -4,10 +4,18 @@
 
 > สถานะ: **กำลังพัฒนา** (เวอร์ชัน 0.1.0) — ยังไม่มี release · รองรับ macOS อย่างเดียว (ฝั่ง iPhone พักไว้ ดู [`docs/spike-ios.md`](docs/spike-ios.md))
 
-<p align="center">
-  <img src="img.png" alt="หน้าต่างลอยของ RxWidget แสดงโควตา Claude และ Codex ช่วง 5 ชั่วโมงและ 7 วัน" width="446">
-</p>
-<p align="center"><sub>หน้าต่างลอยแสดงโควตา Claude และ Codex</sub></p>
+<table align="center">
+  <tr>
+    <td align="center" valign="top">
+      <img src="docs/img.png" alt="หน้าต่างลอยของ RxWidget แสดงโควตา Claude และ Codex ช่วง 5 ชั่วโมงและ 7 วัน" width="320"><br>
+      <sub>หน้าต่างลอย</sub>
+    </td>
+    <td align="center" valign="top">
+      <img src="docs/img2.png" alt="เมนูบน menu bar ของ RxWidget แสดงโควตา เวลารีเซ็ต สวิตช์หน้าต่างลอย และปุ่ม refresh" width="320"><br>
+      <sub>เมนูบน menu bar</sub>
+    </td>
+  </tr>
+</table>
 
 ## ฟีเจอร์
 
@@ -118,7 +126,6 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
 
 ```
 project.yml                 XcodeGen spec (2 target)
-img.png                     ภาพหน้าจอตัวอย่างใน readme
 Config/Signing.xcconfig.example  ตัวอย่าง Team ID, bundle prefix, App Group (คัดลอกเป็น Signing.xcconfig)
 App/                        host app (menu bar)
   RxWidgetApp.swift         MenuBarExtra + หน้า panel ในเมนู
@@ -132,7 +139,7 @@ Shared/                     ใช้ร่วมกันทั้ง 2 target
   UsageViews.swift          view ที่ใช้ร่วมกัน (เมนู, หน้าต่างลอย, widget)
   Theme.swift               สีพาสเทล, gradient แถบ %, พื้นหลังการ์ด
 scripts/probe_providers.py  ตรวจ credential และ endpoint บนเครื่องจริง (ไม่พิมพ์ secret)
-docs/                       ผล spike และ research
+docs/                       ผล spike, research และภาพหน้าจอ (img.png, img2.png)
 ```
 
 ## แก้ปัญหา
