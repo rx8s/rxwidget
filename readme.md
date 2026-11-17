@@ -1,8 +1,22 @@
 # RxWidget
 
-แอป menu bar และ widget บน desktop ของ macOS สำหรับดูโควตาการใช้งาน Claude และ Codex ในที่เดียว
+แอป menu bar, หน้าต่างลอย และ widget บน desktop ของ macOS สำหรับดูโควตาการใช้งาน Claude และ Codex ในที่เดียว
 
-> สถานะ: **กำลังพัฒนา** — ยังไม่มี release
+> สถานะ: **กำลังพัฒนา** (เวอร์ชัน 0.1.0) — ยังไม่มี release · รองรับ macOS อย่างเดียว (ฝั่ง iPhone พักไว้ ดู [`docs/spike-ios.md`](docs/spike-ios.md))
+
+## ฟีเจอร์
+
+- **เมนูบน menu bar** (ไอคอนเกจ) แสดง % โควตาของแต่ละ provider, เวลาที่ตรวจล่าสุด, ปุ่ม refresh และสวิตช์ "หน้าต่างลอย"
+- **หน้าต่างลอย** แสดงโควตาชุดเดียวกับเมนู
+  - ลอยเหนือทุกแอป ไม่แย่ง focus อยู่ทุก Space และทับแอปเต็มจอได้
+  - ลากย้ายได้และจำตำแหน่ง, จำสถานะเปิด/ปิด (เปิดแอปครั้งแรกจะแสดงเลย)
+  - ปุ่ม refresh / ซ่อน โผล่เมื่อเอาเมาส์ไปชี้
+- **widget บน desktop** ขนาดเล็กและกลาง (`systemSmall`, `systemMedium`)
+- ดึงข้อมูลอัตโนมัติทุก 5 นาที ถ้ารอบไหนดึงไม่ได้จะคงค่าเดิมพร้อมป้าย "ข้อมูลเก่า"
+- ธีมสีโทนพาสเทล (`Shared/Theme.swift`) ใช้ร่วมกันทั้งเมนู หน้าต่างลอย และ widget
+  - สีประจำ provider: Claude พีช, Codex มิ้นต์ (สีของแอปเอง ไม่ใช่สีแบรนด์)
+  - แถบ % ไล่สีมิ้นต์ → เหลืองนม → พีช → ชมพูคอรัล, ตัวเลข % เปลี่ยนสีที่ 70% และ 90%
+  - พื้นหลังการ์ดไล่สีพีช → ลาเวนเดอร์ → ฟ้าแบบโปร่ง ใช้ได้ทั้งโหมดสว่างและมืด
 
 ## Provider ที่รองรับ
 
@@ -20,7 +34,7 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
 
 ```
 ┌──────────────────────────────┐        App Group container         ┌────────────────────────┐
-│ RxWidget (menu bar, ไม่ sandbox) │  ──►  <TEAMID>.rxwidget/            ──►  │ RxWidgetExtension      │
+│ RxWidget (menu bar + หน้าต่างลอย, ไม่ sandbox) │  ──►  <TEAMID>.rxwidget/            ──►  │ RxWidgetExtension      │
 │ • อ่าน Keychain / ~/.codex      │       usage-snapshot.json               │ (widget, sandbox)      │
 │ • เรียก API ทุก 5 นาที           │                                         │ • อ่านอย่างเดียว          │
 │ • เขียน snapshot + reload widget│                                         └────────────────────────┘
@@ -28,6 +42,7 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
 ```
 
 - **host app** ดึงข้อมูลทั้งหมด แล้วเขียน `UsageSnapshot` เป็น JSON ลง App Group
+  เมนูและหน้าต่างลอยอ่านข้อมูลจาก `UsageCoordinator` ตัวเดียวกันในหน่วยความจำ
 - **widget** อ่าน snapshot ไปแสดงอย่างเดียว ไม่เรียกเครือข่ายและไม่แตะ credential
 - ช่วงเวลาของโควตาแยกตาม**ความยาว window** (5 ชั่วโมง / 7 วัน) ไม่ยึดชื่อ slot ของ provider
 
@@ -51,7 +66,7 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
 
 ## Build และรัน
 
-1. ใส่ Team ID ใน `Config/Signing.xcconfig`
+1. ใส่ Team ID ของตัวเองใน `Config/Signing.xcconfig` (ค่าที่ commit ไว้เป็นของผู้พัฒนา ต้องเปลี่ยนถ้า build ด้วยบัญชีอื่น)
 
    ```
    DEVELOPMENT_TEAM = XXXXXXXXXX
@@ -73,8 +88,9 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
    ไม่ต้อง commit `RxWidget.xcodeproj` — สร้างใหม่จาก `project.yml` ได้ทุกเมื่อ
    แก้ setting ใน `project.yml` / `Config/*.xcconfig` แทนการแก้ใน Xcode (ค่าที่แก้ใน Xcode จะหายเมื่อรัน `xcodegen`)
 
-3. เลือก scheme `RxWidget` แล้ว Run (⌘R) — ไอคอนเกจจะขึ้นบน menu bar
+3. เลือก scheme `RxWidget` แล้ว Run (⌘R) — ไอคอนเกจจะขึ้นบน menu bar และหน้าต่างลอยจะแสดงขึ้นมา
 4. เพิ่ม widget: คลิกขวาที่ desktop → Edit Widgets → ค้นหา "RxWidget"
+5. ปิด/เปิดหน้าต่างลอยได้จากสวิตช์ "หน้าต่างลอย" ในเมนู
 
 ## โครงสร้างโปรเจกต์
 
@@ -82,14 +98,16 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
 project.yml                 XcodeGen spec (2 target)
 Config/Signing.xcconfig     Team ID, bundle prefix, App Group
 App/                        host app (menu bar)
-  RxWidgetApp.swift         MenuBarExtra + หน้า panel
+  RxWidgetApp.swift         MenuBarExtra + หน้า panel ในเมนู
+  FloatingPanel.swift       หน้าต่างลอย (NSPanel) + จำตำแหน่ง/สถานะ
   UsageCoordinator.swift    รอบดึงข้อมูล, merge ข้อมูลเก่า, เขียน snapshot
   Providers/                provider แต่ละเจ้า + HTTP/process/date helpers
 Widget/                     widget extension
 Shared/                     ใช้ร่วมกันทั้ง 2 target
   UsageModels.swift         UsageSnapshot / ProviderSnapshot / UsageWindow
   SnapshotStore.swift       อ่าน/เขียน JSON ใน App Group
-  UsageViews.swift          view ที่ใช้ร่วมกัน
+  UsageViews.swift          view ที่ใช้ร่วมกัน (เมนู, หน้าต่างลอย, widget)
+  Theme.swift               สีพาสเทล, gradient แถบ %, พื้นหลังการ์ด
 scripts/probe_providers.py  ตรวจ credential และ endpoint บนเครื่องจริง (ไม่พิมพ์ secret)
 docs/                       ผล spike และ research
 ```
@@ -103,6 +121,8 @@ docs/                       ผล spike และ research
 | Codex: หมายเหตุ "ใช้ข้อมูลจาก log" | `wham/usage` ใช้ไม่ได้ ตัวเลขมาจาก session ล่าสุดของ Codex อาจไม่เป็นปัจจุบัน |
 | widget: "เปิด App Group container ไม่ได้" | `DEVELOPMENT_TEAM` ไม่ตรงกับใบรับรอง หรือยังไม่ได้รัน `xcodegen` ใหม่หลังแก้ |
 | widget: "ยังไม่มีข้อมูล" | เปิดแอป RxWidget บน menu bar อย่างน้อยหนึ่งครั้ง |
+| widget ยังเป็นหน้าทดสอบ spike | widget kind เปลี่ยนเป็น `UsageWidget` แล้ว — ลบ widget เดิมออกจาก desktop แล้วเพิ่มใหม่ |
+| หน้าต่างลอยหายไป | เปิดสวิตช์ "หน้าต่างลอย" ในเมนูบน menu bar |
 
 ตรวจ credential และ endpoint จาก Terminal ได้ด้วย:
 
@@ -113,10 +133,12 @@ python3 scripts/probe_providers.py
 ## เอกสารเพิ่มเติม
 
 - [`docs/spike-app-group.md`](docs/spike-app-group.md) — ผลทดสอบ App Group + widget กับ Personal Team
+- [`docs/spike-ios.md`](docs/spike-ios.md) — ผล spike แอป + widget บน iPhone (พักไว้)
 - [`docs/research-providers.md`](docs/research-providers.md) — รูปแบบ credential และ response จริงของแต่ละ provider
 - [`changelog.md`](changelog.md) — บันทึกการเปลี่ยนแปลง
 
 ## แนวทางพัฒนา
 
 - บันทึกทุกการเปลี่ยนแปลงใน `changelog.md` (Keep a Changelog ภาษาไทย, วันที่ YYYY-MM-DD)
+- สีทั้งหมดอยู่ใน `Shared/Theme.swift` — แก้ที่เดียว มีผลทั้งเมนู หน้าต่างลอย และ widget
 - ทำงานบน branch `master`
