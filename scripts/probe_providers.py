@@ -8,8 +8,6 @@ import glob
 import json
 import os
 import subprocess
-import urllib.error
-import urllib.request
 from datetime import datetime, timezone
 
 MAX_BODY = 3000
@@ -23,14 +21,19 @@ def ts(ms):
 
 
 def get(url, headers):
-    req = urllib.request.Request(url, headers=headers)
+    """เรียกผ่าน /usr/bin/curl (ใช้ cert ของระบบ) ส่ง header ทาง stdin เพื่อไม่ให้ token โผล่ใน ps"""
+    config = "".join(f'header = "{k}: {v}"\n' for k, v in headers.items())
+    config += f'url = "{url}"\n'
     try:
-        with urllib.request.urlopen(req, timeout=20) as r:
-            return r.status, r.read().decode("utf-8", "replace")
-    except urllib.error.HTTPError as e:
-        return e.code, e.read().decode("utf-8", "replace")
+        out = subprocess.run(
+            ["/usr/bin/curl", "-sS", "--max-time", "20", "-w", "\n%{http_code}", "-K", "-"],
+            input=config, capture_output=True, text=True)
     except Exception as e:  # noqa: BLE001
         return None, f"{type(e).__name__}: {e}"
+    if out.returncode != 0:
+        return None, out.stderr.strip()
+    body, _, code = out.stdout.rpartition("\n")
+    return int(code), body
 
 
 def show(status, body):

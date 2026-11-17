@@ -28,12 +28,30 @@ macOS จะถามสิทธิ์ ("RxWidget wants to use … Claude Code-
 - มี item `Claude Code-credentials` จริง, top-level keys: `mcpOAuth`, `claudeAiOauth`
 - fields: `accessToken` str, `refreshToken` str, `expiresAt` int, `refreshTokenExpiresAt` int, `scopes` list, `subscriptionType` str (`team`), `rateLimitTier` str
 - ไม่มี `~/.claude/.credentials.json`
-- ⚠️ `expiresAt = 0` → ยังไม่รู้ว่าแปลว่าอะไร (บั๊ก token ถูกล้าง? หรือใช้ token จากที่อื่น?) ต้องตรวจด้วย `scripts/probe_providers.py`
+- ⚠️ ผล `probe_providers.py`: `accessToken` และ `refreshToken` **ว่าง**, `expiresAt = 0`,
+  `refreshTokenExpiresAt` = 2026-09-02 (หมดอายุแล้ว) → ตรงกับบั๊ก token ถูกล้าง
+- `subscriptionType = team`, `rateLimitTier = default_raven`, scopes มี `user:profile`, `user:inference`, `user:sessions:claude_code`
+- ยังไม่รู้ว่า Claude Code ตอนนี้ login อยู่หรือไม่ และถ้า login อยู่ token อยู่ที่ไหน → ต้องตรวจต่อ
+- สิ่งที่แอปต้องรองรับ: item มีอยู่แต่ token ว่าง → สถานะ "ต้อง login Claude Code ใหม่" (แยกจาก "ข้อมูลเก่า")
 
-## 3. Codex auth (เครื่องจริง)
+## 3. Codex (เครื่องจริง)
 
-- `~/.codex/auth.json`: `auth_mode` str, `OPENAI_API_KEY` null, `tokens` {`id_token`, `access_token`, `refresh_token`, `account_id`}, `last_refresh` str
-- rollout files: 8 ไฟล์
+- `~/.codex/auth.json`: `auth_mode` = `chatgpt`, `OPENAI_API_KEY` null,
+  `tokens` {`id_token`, `access_token`, `refresh_token`, `account_id`}, `last_refresh` ISO string
+- `wham/usage`: ยังไม่ได้ผล — Python ของ python.org ไม่มี CA cert ของระบบ (`CERTIFICATE_VERIFY_FAILED`)
+  ไม่ใช่ปัญหาของ endpoint; สคริปต์เปลี่ยนไปใช้ `/usr/bin/curl` แล้ว
+- rollout fallback ใช้ได้: event `token_count` → `payload.rate_limits` ตัวอย่างจริง
+  ```json
+  { "limit_id": "codex", "limit_name": null,
+    "primary":   { "used_percent": 61.0, "window_minutes": 300,   "resets_at": 1794906035 },
+    "secondary": { "used_percent": 10.0, "window_minutes": 10080, "resets_at": 1795078743 },
+    "credits": { "has_credits": false, "unlimited": false, "balance": "0" },
+    "individual_limit": null, "spend_control_reached": null,
+    "plan_type": "plus", "rate_limit_reached_type": null }
+  ```
+  - `window_minutes` 300 = 5 ชั่วโมง, 10080 = 7 วัน → จัดกลุ่มตามค่านี้ (ไม่ยึด primary/secondary)
+  - `resets_at` เป็น epoch วินาที, `used_percent` เป็น double, `credits.balance` เป็น string
+  - field อื่นอาจเป็น null → decode แบบ optional ทั้งหมด
 
 ## 2. ยอดคงเหลือของ OpenAI API
 

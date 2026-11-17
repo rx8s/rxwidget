@@ -5,6 +5,9 @@
 
 ## [Unreleased]
 
+### แก้ไข
+- 2026-11-17: `probe_providers.py` เปลี่ยนจาก urllib เป็น `/usr/bin/curl` แก้ `CERTIFICATE_VERIFY_FAILED` บน Python ของ python.org
+
 ### เพิ่ม
 - 2026-11-17: Spike ทดสอบ App Group + WidgetKit กับ Apple Personal Team
   - `project.yml` สำหรับ XcodeGen: target `RxWidget` (menu bar, ไม่ sandbox) และ `RxWidgetExtension` (widget, sandbox) รองรับ macOS 26 ขึ้นไป
@@ -16,6 +19,7 @@
 - `changelog.md` ไฟล์นี้
 - 2026-11-17: `docs/research-providers.md` ผล research ตำแหน่ง token ของ Claude Code (Keychain `Claude Code-credentials`) และยืนยันว่า OpenAI ไม่มี endpoint ยอดคงเหลือ → ใช้ Costs API
 - 2026-11-17: บันทึกโครงสร้าง credential จริงของ Claude Code และ Codex ใน `docs/research-providers.md`
+- 2026-11-17: บันทึกผล probe รอบแรก: token Claude Code ใน Keychain ว่าง, ตัวอย่าง `rate_limits` จริงจาก Codex rollout
 - 2026-11-17: `scripts/probe_providers.py` สคริปต์ตรวจ token/endpoint/rollout แบบอ่านอย่างเดียว ไม่พิมพ์ secret
 
 ### เปลี่ยนแปลง
