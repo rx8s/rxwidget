@@ -155,6 +155,10 @@ python3 scripts/probe_providers.py
 - [`docs/research-providers.md`](docs/research-providers.md) — รูปแบบ credential และ response จริงของแต่ละ provider
 - [`changelog.md`](changelog.md) — บันทึกการเปลี่ยนแปลง
 
+## License
+
+[MIT](LICENSE) © 2026 rx8s
+
 ## แนวทางพัฒนา
 
 - บันทึกทุกการเปลี่ยนแปลงใน `changelog.md` (Keep a Changelog ภาษาไทย, วันที่ YYYY-MM-DD)

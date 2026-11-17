@@ -6,6 +6,7 @@
 ## [Unreleased]
 
 ### เพิ่ม
+- 2026-11-17: `LICENSE` แบบ MIT (© 2026 rx8s) และหัวข้อ License ใน `readme.md`
 - 2026-11-17: ธีมสี (`Shared/Theme.swift`): สีประจำ provider (จุดหน้าชื่อ + แถบด้านซ้าย), แถบ % ไล่สีเขียว→เหลือง→ส้ม→แดง พร้อมตัวเลข % สีตามระดับ, พื้นหลังการ์ดไล่สีโปร่งๆ ในหน้าต่างลอยและ widget
 - 2026-11-17: หน้าต่างลอย (`App/FloatingPanel.swift`) แสดงโควตาชุดเดียวกับเมนู ลอยเหนือทุกแอป ไม่แย่ง focus, อยู่ทุก Space และทับแอปเต็มจอได้, ลากย้ายได้และจำตำแหน่ง, ปุ่ม refresh/ซ่อนโผล่เมื่อเอาเมาส์ไปชี้
 - 2026-11-17: สวิตช์ "หน้าต่างลอย" ในเมนู จำสถานะเปิด/ปิดไว้ (เปิดครั้งแรกจะแสดงเลย)
@@ -31,6 +32,7 @@
   - `Shared/UsageViews.swift` view ชั่วคราวใช้ร่วมกันระหว่าง menu และ widget (ออกแบบจริงภายหลัง)
 
 ### เปลี่ยนแปลง
+- 2026-11-17: แทน Team ID จริงด้วย `<TEAMID>` ใน `changelog.md`, `docs/spike-app-group.md`, `docs/spike-ios.md` เตรียมเปิด repo เป็น public
 - 2026-11-17: อัปเดต `readme.md`: เพิ่มหัวข้อ "ไฟล์ที่ไม่ถูก commit" (สิ่งที่ต้องสร้างเองหลัง clone + ไฟล์ secret ที่ ignore ไว้), จัดแผนภาพสถาปัตยกรรมใหม่ให้กรอบตรง, เพิ่มแนวทางเรื่องค่าใน `Signing.xcconfig.example`
 - 2026-11-17: แยก `Config/Signing.xcconfig` ออกจาก git: เพิ่ม `Config/Signing.xcconfig.example` (Team ID เป็น `XXXXXXXXXX`), ใส่ไฟล์จริงใน `.gitignore` และเลิก track (ไฟล์บนเครื่องยังอยู่), อัปเดตขั้นตอน build ใน `readme.md`
 - 2026-11-17: ขยาย `.gitignore` เตรียมขึ้น GitHub: ไฟล์ระบบ macOS เพิ่มเติม, `*.xcuserstate`, ผลลัพธ์ build/archive (`.app`, `.dSYM`, `.xcarchive`, `.dmg` ฯลฯ), Python cache/venv, ไฟล์ secret (`.env`, `*.p12`, provisioning profile, `auth.json`, `usage-snapshot.json`), ไฟล์ editor
