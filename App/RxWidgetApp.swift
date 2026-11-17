@@ -3,10 +3,11 @@ import SwiftUI
 @main
 struct RxWidgetApp: App {
     @State private var coordinator: UsageCoordinator
+    @State private var floating: FloatingPanelController
 
     var body: some Scene {
         MenuBarExtra("RxWidget", systemImage: "gauge.with.dots.needle.33percent") {
-            MenuPanel(coordinator: coordinator)
+            MenuPanel(coordinator: coordinator, floating: floating)
         }
         .menuBarExtraStyle(.window)
     }
@@ -14,13 +15,18 @@ struct RxWidgetApp: App {
     init() {
         // เริ่มรอบดึงข้อมูลทันทีที่แอปเปิด ไม่ต้องรอผู้ใช้คลิกเมนู
         let c = UsageCoordinator()
+        let f = FloatingPanelController(coordinator: c)
         _coordinator = State(initialValue: c)
+        _floating = State(initialValue: f)
         c.start()
+        // สร้างหน้าต่างหลัง NSApplication พร้อมแล้ว
+        Task { @MainActor in f.restore() }
     }
 }
 
 struct MenuPanel: View {
     let coordinator: UsageCoordinator
+    let floating: FloatingPanelController
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -39,6 +45,12 @@ struct MenuPanel: View {
             }
 
             Divider()
+            Toggle("หน้าต่างลอย", isOn: Binding(
+                get: { floating.isShown },
+                set: { $0 ? floating.show() : floating.hide() }))
+                .toggleStyle(.switch)
+                .controlSize(.small)
+
             HStack {
                 if let at = coordinator.snapshot?.generatedAt {
                     Text("ตรวจล่าสุด \(at.formatted(date: .omitted, time: .shortened))")

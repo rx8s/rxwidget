@@ -5,6 +5,10 @@
 
 ## [Unreleased]
 
+### เพิ่ม
+- 2026-11-17: หน้าต่างลอย (`App/FloatingPanel.swift`) แสดงโควตาชุดเดียวกับเมนู ลอยเหนือทุกแอป ไม่แย่ง focus, อยู่ทุก Space และทับแอปเต็มจอได้, ลากย้ายได้และจำตำแหน่ง, ปุ่ม refresh/ซ่อนโผล่เมื่อเอาเมาส์ไปชี้
+- 2026-11-17: สวิตช์ "หน้าต่างลอย" ในเมนู จำสถานะเปิด/ปิดไว้ (เปิดครั้งแรกจะแสดงเลย)
+
 ### ลบออก
 - 2026-11-17: พักงานฝั่ง iPhone เพื่อโฟกัส macOS — ลบ target `RxWidgetiOS` / `RxWidgetiOSExtension`, โฟลเดอร์ `iOS/`, `APP_GROUP_ID_IOS` และ deployment target iOS ออกจาก `project.yml` / `Config/Signing.xcconfig` (เก็บ `docs/spike-ios.md` ไว้เป็นบันทึกผล, โค้ดเดิมอยู่ที่ commit `43cf98f`)
 
