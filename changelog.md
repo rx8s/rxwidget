@@ -14,3 +14,6 @@
   - `docs/spike-app-group.md` ขั้นตอนทดสอบและจุดที่ต้องบันทึกผล
 - `.gitignore` สำหรับ Xcode/macOS (ไม่ commit `.xcodeproj` เพราะสร้างจาก `project.yml`)
 - `changelog.md` ไฟล์นี้
+
+### เปลี่ยนแปลง
+- 2026-11-17: ตั้ง `DEVELOPMENT_TEAM = <TEAMID>` (Personal Team) ใน `Config/Signing.xcconfig` → App Group เป็น `<TEAMID>.rxwidget`
