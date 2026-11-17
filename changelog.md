@@ -6,6 +6,12 @@
 ## [Unreleased]
 
 ### เพิ่ม
+- 2026-11-17: Spike iOS ทดสอบแอป + widget บน iPhone กับ Personal Team
+  - target `RxWidgetiOS` / `RxWidgetiOSExtension` (iOS 26.0 ขึ้นไป, iPhone อย่างเดียว) ใน `project.yml`
+  - App Group ฝั่ง iOS `group.com.rx8s.rxwidget` (`APP_GROUP_ID_IOS` ใน `Config/Signing.xcconfig`) เพราะ iOS บังคับให้ขึ้นต้นด้วย `group.`
+  - `iOS/App/RxWidgetiOSApp.swift` แอปทดสอบเขียน snapshot ลง App Group แล้ว reload widget
+  - widget iOS ใช้โค้ดร่วมกับ Mac (`Widget/RxWidgetBundle.swift`, `Shared/`)
+  - `docs/spike-ios.md` ขั้นตอนทดสอบและตารางบันทึกผล
 - 2026-11-17: `readme.md` ภาพรวม, provider, สถาปัตยกรรม, ความปลอดภัยของ credential, วิธี build, โครงสร้างโปรเจกต์, แก้ปัญหา
 - 2026-11-17: Data layer รอบแรก (Claude subscription + Codex)
   - `Shared/UsageModels.swift` model กลาง: `UsageSnapshot` → `ProviderSnapshot` → `UsageWindow` แยกช่วงเวลาตามความยาว window, สถานะ `ok / stale / needsLogin / error / notConfigured`
