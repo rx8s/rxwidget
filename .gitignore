@@ -1,13 +1,52 @@
 # macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
 
 # Xcode (สร้างใหม่จาก project.yml ด้วย xcodegen)
 *.xcodeproj/
 *.xcworkspace/
 xcuserdata/
+*.xcuserstate
 DerivedData/
 build/
+
+# ผลลัพธ์จากการ build / archive
+*.app
+*.appex
+*.dSYM
+*.dSYM.zip
+*.xcarchive
+*.ipa
+*.pkg
+*.dmg
 
 # Swift Package Manager
 .build/
 .swiftpm/
+Package.resolved
+
+# Python (scripts/)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Secret / credential — ห้าม commit
+.env
+.env.*
+*.p12
+*.cer
+*.mobileprovision
+*.provisionprofile
+auth.json
+usage-snapshot.json
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*~
