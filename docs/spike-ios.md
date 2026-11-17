@@ -1,5 +1,8 @@
 # Spike: แอป + widget บน iPhone กับ Personal Team
 
+> **สถานะ: พักไว้ (2026-11-17)** — ลบ target iOS ออกจากโปรเจกต์แล้วเพื่อโฟกัสฝั่ง macOS
+> เอกสารนี้เก็บไว้เป็นบันทึกผล ดูโค้ดเดิมได้ที่ commit `43cf98f`
+
 เป้าหมาย: ยืนยันว่า Personal Team ฟรีทำสิ่งเหล่านี้บน iPhone (iOS 27) ได้
 
 1. sign แอป iOS + widget extension ที่มี App Group `group.com.rx8s.rxwidget`

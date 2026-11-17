@@ -4,7 +4,6 @@ options:
   bundleIdPrefix: com.rx8s
   deploymentTarget:
     macOS: "26.0"
-    iOS: "26.0"
   createIntermediateGroups: true
 
 configFiles:
@@ -64,60 +63,5 @@ targets:
         CFBundleVersion: "1"
         LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
         RXAppGroupID: $(APP_GROUP_ID)
-        NSExtension:
-          NSExtensionPointIdentifier: com.apple.widgetkit-extension
-
-  # --- iOS (spike) ---------------------------------------------------------
-  # ทดสอบว่า Personal Team ใช้ App Group "group.*" กับแอป + widget บน iPhone ได้ไหม
-  # ยังไม่มีการส่งข้อมูลจาก Mac — แอปเขียนข้อมูลทดสอบเอง
-
-  RxWidgetiOS:
-    type: application
-    platform: iOS
-    deploymentTarget: "26.0"
-    sources:
-      - path: iOS/App
-      - path: Shared
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).rxwidget.ios
-        PRODUCT_NAME: RxWidget
-        CODE_SIGN_ENTITLEMENTS: iOS/App/RxWidgetiOS.entitlements
-        GENERATE_INFOPLIST_FILE: NO
-        TARGETED_DEVICE_FAMILY: "1"
-    info:
-      path: iOS/App/Info.plist
-      properties:
-        CFBundleDisplayName: RxWidget
-        CFBundleShortVersionString: "0.1.0"
-        CFBundleVersion: "1"
-        UILaunchScreen: {}
-        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
-        RXAppGroupID: $(APP_GROUP_ID_IOS)
-    dependencies:
-      - target: RxWidgetiOSExtension
-        embed: true
-
-  RxWidgetiOSExtension:
-    type: app-extension
-    platform: iOS
-    deploymentTarget: "26.0"
-    sources:
-      - path: Widget/RxWidgetBundle.swift
-      - path: Shared
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).rxwidget.ios.widget
-        PRODUCT_NAME: RxWidgetiOSExtension
-        CODE_SIGN_ENTITLEMENTS: iOS/Widget/RxWidgetiOSExtension.entitlements
-        GENERATE_INFOPLIST_FILE: NO
-        TARGETED_DEVICE_FAMILY: "1"
-    info:
-      path: iOS/Widget/Info.plist
-      properties:
-        CFBundleDisplayName: RxWidget
-        CFBundleShortVersionString: "0.1.0"
-        CFBundleVersion: "1"
-        RXAppGroupID: $(APP_GROUP_ID_IOS)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension

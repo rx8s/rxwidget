@@ -5,6 +5,9 @@
 
 ## [Unreleased]
 
+### ลบออก
+- 2026-11-17: พักงานฝั่ง iPhone เพื่อโฟกัส macOS — ลบ target `RxWidgetiOS` / `RxWidgetiOSExtension`, โฟลเดอร์ `iOS/`, `APP_GROUP_ID_IOS` และ deployment target iOS ออกจาก `project.yml` / `Config/Signing.xcconfig` (เก็บ `docs/spike-ios.md` ไว้เป็นบันทึกผล, โค้ดเดิมอยู่ที่ commit `43cf98f`)
+
 ### เพิ่ม
 - 2026-11-17: บันทึกผล spike iOS: Personal Team ลงทะเบียน App Group `group.*` และติดตั้งแอป + widget บน iPhone ได้ (ข้อมูลยังเป็นข้อมูลทดสอบ)
 - 2026-11-17: Spike iOS ทดสอบแอป + widget บน iPhone กับ Personal Team

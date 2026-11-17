@@ -113,7 +113,6 @@ python3 scripts/probe_providers.py
 ## เอกสารเพิ่มเติม
 
 - [`docs/spike-app-group.md`](docs/spike-app-group.md) — ผลทดสอบ App Group + widget กับ Personal Team
-- [`docs/spike-ios.md`](docs/spike-ios.md) — spike แอป + widget บน iPhone (กำลังทดสอบ)
 - [`docs/research-providers.md`](docs/research-providers.md) — รูปแบบ credential และ response จริงของแต่ละ provider
 - [`changelog.md`](changelog.md) — บันทึกการเปลี่ยนแปลง
 
