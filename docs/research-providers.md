@@ -38,6 +38,11 @@ macOS จะถามสิทธิ์ ("RxWidget wants to use … Claude Code-
   - ผล: **ทั้ง 28 item token ว่าง, expiresAt = 0**; item ที่มี suffix ไม่มี `subscriptionType` เลย
   - item หลักถูกแก้ล่าสุด 2026-11-17 06:20 UTC แต่ยังว่าง → Claude Code CLI น่าจะไม่ได้ login อยู่
   - `sha256('~/.claude')[:8]` ไม่ตรงกับ suffix ใด → สมมติฐาน hash ของ config dir ยังไม่ยืนยัน (อาจเป็น path อื่น)
+- หลัง `/login` ใหม่ (2026-11-17): **item หลักไม่ถูกแก้เลย** (mdat ยังเป็น 06:20 UTC) token ยังว่าง
+  → ตรงกับบั๊กที่มีรายงานใน GitHub: "Login successful" แต่ไม่เขียนลง Keychain (#73861, #70077 บน macOS 26),
+  Keychain ถูกล็อก (#79407), บันทึก/อ่าน Keychain ล้มเหลวเป็นบางครั้ง (#104547), VS Code ไม่สร้าง item (#108593)
+  บางแหล่งบอกว่าจะ fallback ไป `~/.claude/.credentials.json` แต่บางรายงานบอกว่าไม่สร้างไฟล์นั้นด้วย
+- ผลต่อการออกแบบ: ต้องอ่านทั้ง Keychain และ `~/.claude/.credentials.json` และแสดงสาเหตุให้ชัดเมื่อไม่มี token
 - ผลต่อการออกแบบ: rxwidget ไม่ refresh เอง → ข้อมูล Claude จะสดเฉพาะช่วงที่ Claude Code CLI ถูกใช้และ refresh token ให้
 - สิ่งที่แอปต้องรองรับ: item มีอยู่แต่ token ว่าง → สถานะ "ต้อง login Claude Code ใหม่" (แยกจาก "ข้อมูลเก่า")
 
@@ -93,5 +98,10 @@ macOS จะถามสิทธิ์ ("RxWidget wants to use … Claude Code-
 - https://claudeissues.com/issue/84331-bug-macos-cli-login-loop-keychain-credentials-blob-has-every-accesstoken-refresh
 - https://claudeissues.com/issue/91180-bug-keychain-and-claude-credentials-json-diverge-orphaned-plaintext-credential-c
 - https://claudeissues.com/issue/37512-claude-code-oauth-token-silently-deletes-macos-keychain-credentials-on-exit
+- https://github.com/anthropics/claude-code/issues/73861
+- https://github.com/anthropics/claude-code/issues/70077
+- https://github.com/anthropics/claude-code/issues/79407
+- https://github.com/anthropics/claude-code/issues/104547
+- https://github.com/anthropics/claude-code/issues/108593
 - https://community.openai.com/t/access-billing-balance-costs-via-admin-api/1383654
 - https://raw.githubusercontent.com/steipete/CodexBar/main/docs/openai.md
