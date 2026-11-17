@@ -5,7 +5,7 @@
 
 เป้าหมาย: ยืนยันว่า Personal Team ฟรีทำสิ่งเหล่านี้บน iPhone (iOS 27) ได้
 
-1. sign แอป iOS + widget extension ที่มี App Group `group.com.rx8s.rxwidget`
+1. sign แอป iOS + widget extension ที่มี App Group `group.<BUNDLE_ID_PREFIX>.rxwidget`
 2. แอปเขียน snapshot ลง App Group แล้ว widget อ่านได้
 
 ยังไม่ทดสอบการส่งข้อมูลจริงจาก Mac (เป็น spike ถัดไป)
@@ -14,8 +14,8 @@
 
 | Target | Bundle ID | App Group |
 |---|---|---|
-| `RxWidgetiOS` | `com.rx8s.rxwidget.ios` | `group.com.rx8s.rxwidget` |
-| `RxWidgetiOSExtension` | `com.rx8s.rxwidget.ios.widget` | `group.com.rx8s.rxwidget` |
+| `RxWidgetiOS` | `<BUNDLE_ID_PREFIX>.rxwidget.ios` | `group.<BUNDLE_ID_PREFIX>.rxwidget` |
+| `RxWidgetiOSExtension` | `<BUNDLE_ID_PREFIX>.rxwidget.ios.widget` | `group.<BUNDLE_ID_PREFIX>.rxwidget` |
 
 target ฝั่ง Mac ไม่เปลี่ยน ยังใช้ `<TEAMID>.rxwidget`
 widget iOS ใช้โค้ดเดียวกับ Mac (`Widget/RxWidgetBundle.swift` + `Shared/`)
@@ -27,7 +27,7 @@ widget iOS ใช้โค้ดเดียวกับ Mac (`Widget/RxWidgetBu
 3. เลือก scheme **RxWidgetiOS** และปลายทางเป็น iPhone → ⌘R
    - ถ้า Xcode ไม่สร้าง scheme ให้: Product → Scheme → Manage Schemes… → Autocreate Schemes Now
 4. ถ้าขึ้น "Untrusted Developer": Settings → General → VPN & Device Management → Apple Development: … → Trust แล้ว ⌘R อีกครั้ง
-5. ในแอป: Group ID ต้องเป็น `group.com.rx8s.rxwidget` และมี path ของ container
+5. ในแอป: Group ID ต้องเป็น `group.<BUNDLE_ID_PREFIX>.rxwidget` และมี path ของ container
 6. กด "เขียน snapshot ทดสอบ" → ต้องขึ้น "เขียนและอ่านกลับสำเร็จ"
 7. กดค้างหน้า Home → Edit → Add Widget → "RxWidget" → เพิ่ม
 8. กด "เขียน snapshot ทดสอบ" อีกครั้ง → % ของ Claude ใน widget ต้องเปลี่ยนตาม

@@ -33,6 +33,7 @@
   - `Shared/UsageViews.swift` view ชั่วคราวใช้ร่วมกันระหว่าง menu และ widget (ออกแบบจริงภายหลัง)
 
 ### เปลี่ยนแปลง
+- 2026-11-17: แทน bundle prefix จริงด้วย `<BUNDLE_ID_PREFIX>` ใน `docs/spike-ios.md`
 - 2026-11-17: แทน Team ID จริงด้วย `<TEAMID>` ใน `changelog.md`, `docs/spike-app-group.md`, `docs/spike-ios.md` เตรียมเปิด repo เป็น public
 - 2026-11-17: อัปเดต `readme.md`: เพิ่มหัวข้อ "ไฟล์ที่ไม่ถูก commit" (สิ่งที่ต้องสร้างเองหลัง clone + ไฟล์ secret ที่ ignore ไว้), จัดแผนภาพสถาปัตยกรรมใหม่ให้กรอบตรง, เพิ่มแนวทางเรื่องค่าใน `Signing.xcconfig.example`
 - 2026-11-17: แยก `Config/Signing.xcconfig` ออกจาก git: เพิ่ม `Config/Signing.xcconfig.example` (Team ID เป็น `XXXXXXXXXX`), ใส่ไฟล์จริงใน `.gitignore` และเลิก track (ไฟล์บนเครื่องยังอยู่), อัปเดตขั้นตอน build ใน `readme.md`
