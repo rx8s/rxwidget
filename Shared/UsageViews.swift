@@ -24,13 +24,7 @@ extension UsageWindow {
         return resetsAt <= date
     }
 
-    var tint: Color {
-        switch usedPercent {
-        case ..<70: .green
-        case ..<90: .orange
-        default: .red
-        }
-    }
+    var tint: Color { Theme.levelText(usedPercent) }
 }
 
 struct UsageBar: View {
@@ -88,8 +82,8 @@ struct ProviderSection: View {
         VStack(alignment: .leading, spacing: compact ? 3 : 6) {
             HStack(spacing: 5) {
                 Circle().fill(provider.id.accent).frame(width: compact ? 6 : 8, height: compact ? 6 : 8)
+                // ชื่อใช้สีตัวอักษรปกติ เพราะพาสเทลบนพื้นสว่างอ่านยาก
                 Text(provider.id.displayName).font(compact ? .caption.weight(.semibold) : .headline)
-                    .foregroundStyle(provider.id.accent)
                 if let plan = provider.plan {
                     Text(plan).font(.caption2).foregroundStyle(.secondary)
                 }
