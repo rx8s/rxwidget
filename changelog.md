@@ -13,7 +13,7 @@
 - 2026-11-17: สวิตช์ "หน้าต่างลอย" ในเมนู จำสถานะเปิด/ปิดไว้ (เปิดครั้งแรกจะแสดงเลย)
 
 ### ลบออก
-- 2026-11-17: พักงานฝั่ง iPhone เพื่อโฟกัส macOS — ลบ target `RxWidgetiOS` / `RxWidgetiOSExtension`, โฟลเดอร์ `iOS/`, `APP_GROUP_ID_IOS` และ deployment target iOS ออกจาก `project.yml` / `Config/Signing.xcconfig` (เก็บ `docs/spike-ios.md` ไว้เป็นบันทึกผล, โค้ดเดิมอยู่ที่ commit `43cf98f`)
+- 2026-11-17: พักงานฝั่ง iPhone เพื่อโฟกัส macOS — ลบ target `RxWidgetiOS` / `RxWidgetiOSExtension`, โฟลเดอร์ `iOS/`, `APP_GROUP_ID_IOS` และ deployment target iOS ออกจาก `project.yml` / `Config/Signing.xcconfig` (เก็บ `docs/spike-ios.md` ไว้เป็นบันทึกผล, โค้ดเดิมอยู่ที่ commit `034845f`)
 
 ### เพิ่ม
 - 2026-11-17: บันทึกผล spike iOS: Personal Team ลงทะเบียน App Group `group.*` และติดตั้งแอป + widget บน iPhone ได้ (ข้อมูลยังเป็นข้อมูลทดสอบ)
@@ -33,6 +33,7 @@
   - `Shared/UsageViews.swift` view ชั่วคราวใช้ร่วมกันระหว่าง menu และ widget (ออกแบบจริงภายหลัง)
 
 ### เปลี่ยนแปลง
+- 2026-11-17: แก้ลิงก์ commit โค้ด iOS เดิมใน `docs/spike-ios.md` และ changelog จาก `43cf98f` เป็น `034845f` (รหัส commit เปลี่ยนหลังเขียนประวัติใหม่)
 - 2026-11-17: แทน bundle prefix จริงด้วย `<BUNDLE_ID_PREFIX>` ใน `docs/spike-ios.md`
 - 2026-11-17: แทน Team ID จริงด้วย `<TEAMID>` ใน `changelog.md`, `docs/spike-app-group.md`, `docs/spike-ios.md` เตรียมเปิด repo เป็น public
 - 2026-11-17: อัปเดต `readme.md`: เพิ่มหัวข้อ "ไฟล์ที่ไม่ถูก commit" (สิ่งที่ต้องสร้างเองหลัง clone + ไฟล์ secret ที่ ignore ไว้), จัดแผนภาพสถาปัตยกรรมใหม่ให้กรอบตรง, เพิ่มแนวทางเรื่องค่าใน `Signing.xcconfig.example`
