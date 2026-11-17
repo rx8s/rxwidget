@@ -42,6 +42,8 @@ macOS จะถามสิทธิ์ ("RxWidget wants to use … Claude Code-
   → ตรงกับบั๊กที่มีรายงานใน GitHub: "Login successful" แต่ไม่เขียนลง Keychain (#73861, #70077 บน macOS 26),
   Keychain ถูกล็อก (#79407), บันทึก/อ่าน Keychain ล้มเหลวเป็นบางครั้ง (#104547), VS Code ไม่สร้าง item (#108593)
   บางแหล่งบอกว่าจะ fallback ไป `~/.claude/.credentials.json` แต่บางรายงานบอกว่าไม่สร้างไฟล์นั้นด้วย
+- ตรวจเพิ่ม (Claude Code 2.1.326): `/status` แสดง `Login: Expired — log in again`, `claude doctor` แสดง "Not signed in to claude.ai",
+  login keychain ไม่ได้ล็อก (`no-timeout`) → **ยังไม่ได้ login สำเร็จใน CLI จริง** จึงยังสรุปไม่ได้ว่าเป็นบั๊ก Keychain
 - ผลต่อการออกแบบ: ต้องอ่านทั้ง Keychain และ `~/.claude/.credentials.json` และแสดงสาเหตุให้ชัดเมื่อไม่มี token
 - ผลต่อการออกแบบ: rxwidget ไม่ refresh เอง → ข้อมูล Claude จะสดเฉพาะช่วงที่ Claude Code CLI ถูกใช้และ refresh token ให้
 - สิ่งที่แอปต้องรองรับ: item มีอยู่แต่ token ว่าง → สถานะ "ต้อง login Claude Code ใหม่" (แยกจาก "ข้อมูลเก่า")
