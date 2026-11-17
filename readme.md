@@ -33,12 +33,13 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
 ## สถาปัตยกรรม
 
 ```
-┌──────────────────────────────┐        App Group container         ┌────────────────────────┐
-│ RxWidget (menu bar + หน้าต่างลอย, ไม่ sandbox) │  ──►  <TEAMID>.rxwidget/            ──►  │ RxWidgetExtension      │
-│ • อ่าน Keychain / ~/.codex      │       usage-snapshot.json               │ (widget, sandbox)      │
-│ • เรียก API ทุก 5 นาที           │                                         │ • อ่านอย่างเดียว          │
-│ • เขียน snapshot + reload widget│                                         └────────────────────────┘
-└──────────────────────────────┘
+┌─────────────────────────────────┐    App Group container    ┌──────────────────────┐
+│ RxWidget (host app, ไม่ sandbox) │ ──► <TEAMID>.rxwidget/ ──► │ RxWidgetExtension    │
+│ • menu bar + หน้าต่างลอย          │    usage-snapshot.json     │ (widget, sandbox)    │
+│ • อ่าน Keychain / ~/.codex        │                           │ • อ่านอย่างเดียว        │
+│ • เรียก API ทุก 5 นาที             │                           └──────────────────────┘
+│ • เขียน snapshot + reload widget  │
+└─────────────────────────────────┘
 ```
 
 - **host app** ดึงข้อมูลทั้งหมด แล้วเขียน `UsageSnapshot` เป็น JSON ลง App Group
@@ -54,6 +55,17 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
 - token ของ Codex อ่านจาก `~/.codex/auth.json`
 - Admin key ของ Claude API / OpenAI API (เมื่อทำเสร็จ) จะเก็บใน Keychain ของ RxWidget เอง
 - token ไม่ถูกเขียนลง App Group หรือ log
+
+## ไฟล์ที่ไม่ถูก commit
+
+ไฟล์เหล่านี้อยู่ใน `.gitignore` ต้องสร้างเองบนเครื่องหลัง clone
+
+| ไฟล์ | วิธีสร้าง |
+|---|---|
+| `Config/Signing.xcconfig` | คัดลอกจาก `Config/Signing.xcconfig.example` แล้วใส่ Team ID ของตัวเอง |
+| `RxWidget.xcodeproj/` | รัน `xcodegen` (สร้างจาก `project.yml`) |
+
+นอกจากนี้ `.gitignore` กันไฟล์ secret ไว้ด้วย (`.env`, `*.p12`, provisioning profile, `auth.json`, `usage-snapshot.json`) — ห้ามบังคับ add ด้วย `git add -f`
 
 ## ความต้องการของระบบ
 
@@ -148,3 +160,4 @@ python3 scripts/probe_providers.py
 - บันทึกทุกการเปลี่ยนแปลงใน `changelog.md` (Keep a Changelog ภาษาไทย, วันที่ YYYY-MM-DD)
 - สีทั้งหมดอยู่ใน `Shared/Theme.swift` — แก้ที่เดียว มีผลทั้งเมนู หน้าต่างลอย และ widget
 - ทำงานบน branch `master`
+- ค่าที่ผูกกับเครื่องหรือบัญชี (Team ID ฯลฯ) ให้ใส่ใน `Config/Signing.xcconfig` ที่ไม่ถูก commit ถ้าเพิ่ม key ใหม่ ให้เพิ่มใน `Signing.xcconfig.example` ด้วย
