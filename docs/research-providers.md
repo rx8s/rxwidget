@@ -35,14 +35,35 @@ macOS จะถามสิทธิ์ ("RxWidget wants to use … Claude Code-
 - `security dump-keychain` พบ item `Claude Code-credentials-<8 hex>` อีก 27 ตัว + `Claude Code-credentials` (ไม่มี suffix)
   - สมมติฐาน (ยังไม่ยืนยัน): suffix มาจาก hash ของ config dir ที่ไม่ใช่ค่า default เช่น session ของ Claude desktop/Cowork
   - `probe_providers.py` ไล่ดูทุก item เพื่อหาว่าตัวไหนมี token ที่ใช้ได้
+  - ผล: **ทั้ง 28 item token ว่าง, expiresAt = 0**; item ที่มี suffix ไม่มี `subscriptionType` เลย
+  - item หลักถูกแก้ล่าสุด 2026-11-17 06:20 UTC แต่ยังว่าง → Claude Code CLI น่าจะไม่ได้ login อยู่
+  - `sha256('~/.claude')[:8]` ไม่ตรงกับ suffix ใด → สมมติฐาน hash ของ config dir ยังไม่ยืนยัน (อาจเป็น path อื่น)
+- ผลต่อการออกแบบ: rxwidget ไม่ refresh เอง → ข้อมูล Claude จะสดเฉพาะช่วงที่ Claude Code CLI ถูกใช้และ refresh token ให้
 - สิ่งที่แอปต้องรองรับ: item มีอยู่แต่ token ว่าง → สถานะ "ต้อง login Claude Code ใหม่" (แยกจาก "ข้อมูลเก่า")
 
 ## 3. Codex (เครื่องจริง)
 
 - `~/.codex/auth.json`: `auth_mode` = `chatgpt`, `OPENAI_API_KEY` null,
   `tokens` {`id_token`, `access_token`, `refresh_token`, `account_id`}, `last_refresh` ISO string
-- `wham/usage`: ยังไม่ได้ผล — Python ของ python.org ไม่มี CA cert ของระบบ (`CERTIFICATE_VERIFY_FAILED`)
-  ไม่ใช่ปัญหาของ endpoint; สคริปต์เปลี่ยนไปใช้ `/usr/bin/curl` แล้ว
+- `wham/usage`: **ใช้ได้ (HTTP 200)** ด้วย `Authorization: Bearer <access_token>` + `ChatGPT-Account-Id: <account_id>`
+  (รอบแรก error `CERTIFICATE_VERIFY_FAILED` เป็นปัญหา Python ของ python.org ไม่ใช่ endpoint)
+  ตัวอย่าง (ตัด id/email ออก):
+  ```json
+  { "plan_type": "plus",
+    "rate_limit": { "allowed": true, "limit_reached": false,
+      "primary_window":   { "used_percent": 63, "limit_window_seconds": 18000,  "reset_after_seconds": 9558,   "reset_at": 1794906036 },
+      "secondary_window": { "used_percent": 11, "limit_window_seconds": 604800, "reset_after_seconds": 182266, "reset_at": 1795078744 } },
+    "code_review_rate_limit": null, "additional_rate_limits": null,
+    "model_usage": { "<model>": { "available": true, "available_at": null, "credits_would_enable": false } },
+    "credits": { "has_credits": false, "unlimited": false, "overage_limit_reached": false, "balance": "0",
+                 "approx_local_messages": [0, 0], "approx_cloud_messages": [0, 0] },
+    "spend_control": { "reached": false, "individual_limit": null },
+    "rate_limit_reached_type": null, "promo": null,
+    "rate_limit_reset_credits": { "available_count": 3, "applicable_available_count": 0 } }
+  ```
+  - ต่างจาก rollout: ใช้ `limit_window_seconds` (ไม่ใช่ `window_minutes`), `used_percent` เป็น int, `reset_at` (ไม่มี s)
+  - ค่าตรงกับ rollout (61→63%, 10→11%) → normalize ทั้งสองแหล่งเป็นโมเดลเดียว: window (วินาที), used %, reset time
+  - `additional_rate_limits` อาจมีค่า → รองรับ window เพิ่มเติม
 - rollout fallback ใช้ได้: event `token_count` → `payload.rate_limits` ตัวอย่างจริง
   ```json
   { "limit_id": "codex", "limit_name": null,
