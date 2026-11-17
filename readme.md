@@ -66,7 +66,12 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
 
 ## Build และรัน
 
-1. ใส่ Team ID ของตัวเองใน `Config/Signing.xcconfig` (ค่าที่ commit ไว้เป็นของผู้พัฒนา ต้องเปลี่ยนถ้า build ด้วยบัญชีอื่น)
+1. คัดลอกไฟล์ตัวอย่าง แล้วใส่ Team ID ของตัวเองใน `Config/Signing.xcconfig`
+   (ไฟล์นี้อยู่ใน `.gitignore` ไม่ถูก commit)
+
+   ```bash
+   cp Config/Signing.xcconfig.example Config/Signing.xcconfig
+   ```
 
    ```
    DEVELOPMENT_TEAM = XXXXXXXXXX
@@ -96,7 +101,7 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
 
 ```
 project.yml                 XcodeGen spec (2 target)
-Config/Signing.xcconfig     Team ID, bundle prefix, App Group
+Config/Signing.xcconfig.example  ตัวอย่าง Team ID, bundle prefix, App Group (คัดลอกเป็น Signing.xcconfig)
 App/                        host app (menu bar)
   RxWidgetApp.swift         MenuBarExtra + หน้า panel ในเมนู
   FloatingPanel.swift       หน้าต่างลอย (NSPanel) + จำตำแหน่ง/สถานะ
@@ -119,6 +124,7 @@ docs/                       ผล spike และ research
 | Claude: "ยังไม่ได้ login (token ว่าง)" | Claude Code ไม่ได้ login — รัน `claude auth login` แล้วเช็ก `/status` ใน `claude` |
 | Claude: "ข้อมูลเก่า · token หมดอายุ" | token ของ Claude Code อายุ ~8 ชั่วโมง เปิด `claude` สักครั้งเพื่อให้ต่ออายุ |
 | Codex: หมายเหตุ "ใช้ข้อมูลจาก log" | `wham/usage` ใช้ไม่ได้ ตัวเลขมาจาก session ล่าสุดของ Codex อาจไม่เป็นปัจจุบัน |
+| xcodegen / build: หา `Signing.xcconfig` ไม่เจอ | ยังไม่ได้คัดลอกจาก `Config/Signing.xcconfig.example` |
 | widget: "เปิด App Group container ไม่ได้" | `DEVELOPMENT_TEAM` ไม่ตรงกับใบรับรอง หรือยังไม่ได้รัน `xcodegen` ใหม่หลังแก้ |
 | widget: "ยังไม่มีข้อมูล" | เปิดแอป RxWidget บน menu bar อย่างน้อยหนึ่งครั้ง |
 | widget ยังเป็นหน้าทดสอบ spike | widget kind เปลี่ยนเป็น `UsageWidget` แล้ว — ลบ widget เดิมออกจาก desktop แล้วเพิ่มใหม่ |

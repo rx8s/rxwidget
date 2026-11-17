@@ -36,6 +36,7 @@ __pycache__/
 venv/
 
 # Secret / credential — ห้าม commit
+Config/Signing.xcconfig
 .env
 .env.*
 *.p12
