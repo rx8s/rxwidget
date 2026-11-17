@@ -6,6 +6,7 @@
 ## [Unreleased]
 
 ### เพิ่ม
+- 2026-11-17: `readme.md` ภาพรวม, provider, สถาปัตยกรรม, ความปลอดภัยของ credential, วิธี build, โครงสร้างโปรเจกต์, แก้ปัญหา
 - 2026-11-17: Data layer รอบแรก (Claude subscription + Codex)
   - `Shared/UsageModels.swift` model กลาง: `UsageSnapshot` → `ProviderSnapshot` → `UsageWindow` แยกช่วงเวลาตามความยาว window, สถานะ `ok / stale / needsLogin / error / notConfigured`
   - `App/Providers/ClaudeSubscriptionProvider.swift` อ่าน token จาก Keychain `Claude Code-credentials` ผ่าน `/usr/bin/security` (ไม่ refresh เอง), เรียก `/api/oauth/usage` ใช้ `limits[]` เป็นหลัก fallback `five_hour`/`seven_day`, token ว่าง → `needsLogin`, หมดอายุ/401/403 → `stale`
