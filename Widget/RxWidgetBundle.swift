@@ -4,65 +4,97 @@ import WidgetKit
 @main
 struct RxWidgetBundle: WidgetBundle {
     var body: some Widget {
-        SpikeWidget()
+        UsageWidget()
     }
 }
 
-struct SpikeEntry: TimelineEntry {
+struct UsageEntry: TimelineEntry {
     let date: Date
-    let result: Result<SpikeSnapshot, SnapshotStoreError>
+    let result: Result<UsageSnapshot, SnapshotStoreError>
 }
 
-struct SpikeProvider: TimelineProvider {
-    func placeholder(in context: Context) -> SpikeEntry {
-        SpikeEntry(date: .now, result: .success(.init(counter: 0, writtenAt: .now, writer: "placeholder")))
+/// widget อ่านอย่างเดียว; host สั่ง reload ทุกครั้งที่เขียน snapshot ใหม่
+struct UsageTimelineProvider: TimelineProvider {
+    func placeholder(in context: Context) -> UsageEntry {
+        UsageEntry(date: .now, result: .success(.placeholder))
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (SpikeEntry) -> Void) {
-        completion(makeEntry())
+    func getSnapshot(in context: Context, completion: @escaping (UsageEntry) -> Void) {
+        completion(context.isPreview ? placeholder(in: context) : makeEntry())
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<SpikeEntry>) -> Void) {
-        // widget อ่านอย่างเดียว; host เป็นคนสั่ง reload เมื่อเขียนข้อมูลใหม่
+    func getTimeline(in context: Context, completion: @escaping (Timeline<UsageEntry>) -> Void) {
         completion(Timeline(entries: [makeEntry()], policy: .after(.now.addingTimeInterval(15 * 60))))
     }
 
-    private func makeEntry() -> SpikeEntry {
-        let result: Result<SpikeSnapshot, SnapshotStoreError>
+    private func makeEntry() -> UsageEntry {
+        let result: Result<UsageSnapshot, SnapshotStoreError>
         do { result = .success(try SnapshotStore.read()) }
         catch { result = .failure(error) }
-        return SpikeEntry(date: .now, result: result)
+        return UsageEntry(date: .now, result: result)
     }
 }
 
-struct SpikeWidgetView: View {
-    let entry: SpikeEntry
+struct UsageWidgetView: View {
+    @Environment(\.widgetFamily) private var family
+    let entry: UsageEntry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("App Group spike").font(.caption).foregroundStyle(.secondary)
+        Group {
             switch entry.result {
-            case .success(let s):
-                Text("#\(s.counter)").font(.system(size: 40, weight: .semibold, design: .rounded))
-                Text("เขียนเมื่อ \(s.writtenAt.formatted(date: .omitted, time: .standard))")
-                    .font(.caption)
+            case .success(let snapshot):
+                content(snapshot)
             case .failure(let error):
-                Image(systemName: "exclamationmark.triangle")
-                Text(error.description).font(.caption).lineLimit(4)
+                VStack(alignment: .leading, spacing: 4) {
+                    Image(systemName: "exclamationmark.triangle")
+                    Text(error.description).font(.caption).lineLimit(4)
+                }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .containerBackground(.fill.tertiary, for: .widget)
     }
+
+    @ViewBuilder
+    private func content(_ snapshot: UsageSnapshot) -> some View {
+        let providers = snapshot.providers
+        if family == .systemSmall {
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(providers) { ProviderSection(provider: $0, compact: true, maxWindows: 2) }
+                Spacer(minLength: 0)
+            }
+        } else {
+            HStack(alignment: .top, spacing: 12) {
+                ForEach(providers) { ProviderSection(provider: $0, compact: true, maxWindows: 3) }
+            }
+        }
+    }
 }
 
-struct SpikeWidget: Widget {
+struct UsageWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "SpikeWidget", provider: SpikeProvider()) { entry in
-            SpikeWidgetView(entry: entry)
+        StaticConfiguration(kind: "UsageWidget", provider: UsageTimelineProvider()) { entry in
+            UsageWidgetView(entry: entry)
         }
-        .configurationDisplayName("RxWidget Spike")
-        .description("ทดสอบอ่าน snapshot จาก App Group")
+        .configurationDisplayName("RxWidget")
+        .description("โควตา Claude และ Codex")
         .supportedFamilies([.systemSmall, .systemMedium])
+    }
+}
+
+extension UsageSnapshot {
+    static var placeholder: UsageSnapshot {
+        let now = Date.now
+        func w(_ id: String, _ kind: WindowKind, _ label: String, _ p: Double) -> UsageWindow {
+            UsageWindow(id: id, kind: kind, label: label, usedPercent: p, resetsAt: now.addingTimeInterval(3600))
+        }
+        return UsageSnapshot(generatedAt: now, providers: [
+            ProviderSnapshot(id: .claudeSubscription, status: .ok, windows: [
+                w("s", .session, "5 ชั่วโมง", 25), w("w", .weekly, "7 วัน", 60),
+            ], checkedAt: now),
+            ProviderSnapshot(id: .codex, status: .ok, windows: [
+                w("s", .session, "5 ชั่วโมง", 40), w("w", .weekly, "7 วัน", 10),
+            ], checkedAt: now),
+        ])
     }
 }

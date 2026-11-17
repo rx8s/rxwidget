@@ -1,16 +1,9 @@
 import Foundation
 
-/// ข้อมูลทดสอบสำหรับ spike: host เขียน, widget อ่าน
-struct SpikeSnapshot: Codable, Sendable, Equatable {
-    var counter: Int
-    var writtenAt: Date
-    var writer: String
-}
-
 enum SnapshotStoreError: Error, CustomStringConvertible {
     case missingGroupID
     case noContainer(groupID: String)
-    case notFound(path: String)
+    case notFound
     case io(String)
 
     var description: String {
@@ -20,16 +13,17 @@ enum SnapshotStoreError: Error, CustomStringConvertible {
         case .noContainer(let id):
             "เปิด App Group container ไม่ได้: \(id)"
         case .notFound:
-            "ยังไม่มี snapshot"
+            "ยังไม่มีข้อมูล — เปิดแอป RxWidget บน menu bar"
         case .io(let message):
             message
         }
     }
 }
 
-/// อ่าน/เขียน snapshot ใน App Group container
+/// อ่าน/เขียน UsageSnapshot ใน App Group container
+/// host เขียนอย่างเดียว, widget อ่านอย่างเดียว
 enum SnapshotStore {
-    static let fileName = "spike-snapshot.json"
+    static let fileName = "usage-snapshot.json"
 
     static var groupID: String? {
         guard let id = Bundle.main.object(forInfoDictionaryKey: "RXAppGroupID") as? String,
@@ -49,31 +43,30 @@ enum SnapshotStore {
         try containerURL().appending(path: fileName)
     }
 
-    static func write(_ snapshot: SpikeSnapshot) throws(SnapshotStoreError) {
+    static func write(_ snapshot: UsageSnapshot) throws(SnapshotStoreError) {
         let url = try fileURL()
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
             let data = try encoder.encode(snapshot)
             try FileManager.default.createDirectory(
                 at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
             try data.write(to: url, options: .atomic)
         } catch {
-            throw .io("เขียนไม่สำเร็จ: \(error.localizedDescription)")
+            throw .io("เขียน snapshot ไม่สำเร็จ: \(error.localizedDescription)")
         }
     }
 
-    static func read() throws(SnapshotStoreError) -> SpikeSnapshot {
+    static func read() throws(SnapshotStoreError) -> UsageSnapshot {
         let url = try fileURL()
-        guard FileManager.default.fileExists(atPath: url.path) else {
-            throw .notFound(path: url.path)
-        }
+        guard FileManager.default.fileExists(atPath: url.path) else { throw .notFound }
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            return try decoder.decode(SpikeSnapshot.self, from: Data(contentsOf: url))
+            return try decoder.decode(UsageSnapshot.self, from: Data(contentsOf: url))
         } catch {
-            throw .io("อ่านไม่สำเร็จ: \(error.localizedDescription)")
+            throw .io("อ่าน snapshot ไม่สำเร็จ: \(error.localizedDescription)")
         }
     }
 }

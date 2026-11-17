@@ -5,6 +5,22 @@
 
 ## [Unreleased]
 
+### เพิ่ม
+- 2026-11-17: Data layer รอบแรก (Claude subscription + Codex)
+  - `Shared/UsageModels.swift` model กลาง: `UsageSnapshot` → `ProviderSnapshot` → `UsageWindow` แยกช่วงเวลาตามความยาว window, สถานะ `ok / stale / needsLogin / error / notConfigured`
+  - `App/Providers/ClaudeSubscriptionProvider.swift` อ่าน token จาก Keychain `Claude Code-credentials` ผ่าน `/usr/bin/security` (ไม่ refresh เอง), เรียก `/api/oauth/usage` ใช้ `limits[]` เป็นหลัก fallback `five_hour`/`seven_day`, token ว่าง → `needsLogin`, หมดอายุ/401/403 → `stale`
+  - `App/Providers/CodexProvider.swift` เรียก `wham/usage` ถ้าไม่ได้ → อ่าน event `token_count` ล่าสุดจาก rollout (20 ไฟล์ใหม่สุด) พร้อมหมายเหตุสาเหตุ
+  - `App/Providers/Support.swift` ตัวรัน process, HTTP (timeout 20 วิ, ephemeral), parser วันที่ ISO 8601 (เศษวินาทีกี่หลักก็ได้) และ epoch วินาที/มิลลิวินาที
+  - `App/UsageCoordinator.swift` ดึงข้อมูลทุก 5 นาที (กด refresh เองได้), ถ้ารอบนี้ไม่ได้ข้อมูลให้คงค่าเดิมพร้อมสถานะข้อมูลเก่า, เขียน `usage-snapshot.json` ลง App Group แล้ว reload widget
+  - `Shared/UsageViews.swift` view ชั่วคราวใช้ร่วมกันระหว่าง menu และ widget (ออกแบบจริงภายหลัง)
+
+### เปลี่ยนแปลง
+- 2026-11-17: `SnapshotStore` เก็บ `UsageSnapshot` ในไฟล์ `usage-snapshot.json` แทนข้อมูล spike
+- 2026-11-17: menu bar แสดงโควตาจริงแทนหน้าทดสอบ spike, widget เปลี่ยน kind เป็น `UsageWidget` (ต้องลบ widget spike เดิมแล้วเพิ่มใหม่)
+
+### ลบออก
+- 2026-11-17: `Shared/SpikeSnapshot.swift` (แทนด้วย model จริง)
+
 ### แก้ไข
 - 2026-11-17: `probe_providers.py` เปลี่ยนจาก urllib เป็น `/usr/bin/curl` แก้ `CERTIFICATE_VERIFY_FAILED` บน Python ของ python.org
 
