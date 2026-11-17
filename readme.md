@@ -4,6 +4,11 @@
 
 > สถานะ: **กำลังพัฒนา** (เวอร์ชัน 0.1.0) — ยังไม่มี release · รองรับ macOS อย่างเดียว (ฝั่ง iPhone พักไว้ ดู [`docs/spike-ios.md`](docs/spike-ios.md))
 
+<p align="center">
+  <img src="img.png" alt="หน้าต่างลอยของ RxWidget แสดงโควตา Claude และ Codex ช่วง 5 ชั่วโมงและ 7 วัน" width="446">
+</p>
+<p align="center"><sub>หน้าต่างลอยแสดงโควตา Claude และ Codex</sub></p>
+
 ## ฟีเจอร์
 
 - **เมนูบน menu bar** (ไอคอนเกจ) แสดง % โควตาของแต่ละ provider, เวลาที่ตรวจล่าสุด, ปุ่ม refresh และสวิตช์ "หน้าต่างลอย"
@@ -113,6 +118,7 @@ endpoint ของ Claude subscription และ Codex **ไม่ได้ป�
 
 ```
 project.yml                 XcodeGen spec (2 target)
+img.png                     ภาพหน้าจอตัวอย่างใน readme
 Config/Signing.xcconfig.example  ตัวอย่าง Team ID, bundle prefix, App Group (คัดลอกเป็น Signing.xcconfig)
 App/                        host app (menu bar)
   RxWidgetApp.swift         MenuBarExtra + หน้า panel ในเมนู
