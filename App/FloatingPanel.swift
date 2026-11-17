@@ -13,7 +13,7 @@ final class FloatingPanelController {
 
     private(set) var isShown = false
     @ObservationIgnored private var panel: NSPanel?
-    @ObservationIgnored private let coordinator: UsageCoordinator
+    private let coordinator: UsageCoordinator
 
     init(coordinator: UsageCoordinator) {
         self.coordinator = coordinator
