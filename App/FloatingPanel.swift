@@ -120,9 +120,7 @@ struct FloatingUsageView: View {
         }
         .padding(12)
         .frame(width: 220)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-            .strokeBorder(.separator.opacity(0.5), lineWidth: 0.5))
+        .background { TintedCardBackground(cornerRadius: 14) }
         .contentShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .gesture(WindowDragGesture())
         .onHover { hovering = $0 }

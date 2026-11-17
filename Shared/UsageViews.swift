@@ -37,21 +37,43 @@ struct UsageBar: View {
     let window: UsageWindow
     var compact = false
 
+    private var fraction: Double {
+        window.isExpired() ? 0 : min(max(window.usedPercent, 0), 100) / 100
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 3) {
             HStack(alignment: .firstTextBaseline) {
                 Text(window.label).font(compact ? .caption2 : .caption)
                     .lineLimit(1)
                 Spacer(minLength: 4)
                 Text(window.isExpired() ? "รีเซ็ตแล้ว" : "\(Int(window.usedPercent.rounded()))%")
-                    .font((compact ? Font.caption2 : .caption).monospacedDigit().weight(.semibold))
+                    .font((compact ? Font.caption2 : .caption).monospacedDigit().weight(.bold))
+                    .foregroundStyle(window.isExpired() ? Color.secondary : window.tint)
             }
-            ProgressView(value: window.isExpired() ? 0 : min(max(window.usedPercent, 0), 100), total: 100)
-                .tint(window.tint)
-                .controlSize(.small)
+            GradientBar(fraction: fraction)
+                .frame(height: compact ? 5 : 7)
             if !compact, let resetsAt = window.resetsAt, !window.isExpired() {
                 Text("รีเซ็ต \(resetsAt, style: .relative)")
                     .font(.caption2).foregroundStyle(.secondary)
+            }
+        }
+    }
+}
+
+/// แถบ % แบบไล่สี: gradient เต็มความกว้าง แล้ว mask ให้เห็นแค่ส่วนที่ใช้ไป
+/// สีที่ปลายแถบจึงบอกระดับได้ทันที (เขียว → แดง)
+struct GradientBar: View {
+    let fraction: Double
+
+    var body: some View {
+        GeometryReader { geo in
+            ZStack(alignment: .leading) {
+                Capsule().fill(.quaternary)
+                Capsule().fill(Theme.levelGradient)
+                    .mask(alignment: .leading) {
+                        Capsule().frame(width: max(geo.size.width * fraction, fraction > 0 ? geo.size.height : 0))
+                    }
             }
         }
     }
@@ -64,8 +86,10 @@ struct ProviderSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: compact ? 3 : 6) {
-            HStack(spacing: 4) {
+            HStack(spacing: 5) {
+                Circle().fill(provider.id.accent).frame(width: compact ? 6 : 8, height: compact ? 6 : 8)
                 Text(provider.id.displayName).font(compact ? .caption.weight(.semibold) : .headline)
+                    .foregroundStyle(provider.id.accent)
                 if let plan = provider.plan {
                     Text(plan).font(.caption2).foregroundStyle(.secondary)
                 }
@@ -91,6 +115,11 @@ struct ProviderSection: View {
             } else if provider.windows.isEmpty, let message = provider.status.message {
                 Text(message).font(.caption2).foregroundStyle(.secondary).lineLimit(2)
             }
+        }
+        // แถบสีประจำ provider ด้านซ้าย
+        .padding(.leading, compact ? 7 : 9)
+        .overlay(alignment: .leading) {
+            Capsule().fill(provider.id.accent.gradient).frame(width: 3)
         }
     }
 }

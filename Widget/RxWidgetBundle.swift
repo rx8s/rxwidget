@@ -52,7 +52,12 @@ struct UsageWidgetView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .containerBackground(.fill.tertiary, for: .widget)
+        .containerBackground(for: .widget) {
+            ZStack {
+                Rectangle().fill(.fill.tertiary)
+                Rectangle().fill(Theme.cardGradient).opacity(Theme.cardTintOpacity)
+            }
+        }
     }
 
     @ViewBuilder
