@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Xcode (สร้างใหม่จาก project.yml ด้วย xcodegen)
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+build/
+
+# Swift Package Manager
+.build/
+.swiftpm/

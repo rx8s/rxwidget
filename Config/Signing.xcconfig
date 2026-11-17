@@ -1,0 +1,8 @@
+// การ sign โค้ดของ rxwidget (Apple Personal Team ฟรี)
+//
+// ใส่ Team ID 10 ตัวของ Personal Team ตรงนี้ (Xcode → Settings → Accounts)
+// App Group จะเป็น "<TEAMID>.rxwidget" อัตโนมัติ
+DEVELOPMENT_TEAM =
+
+BUNDLE_ID_PREFIX = com.rx8s
+APP_GROUP_ID = $(DEVELOPMENT_TEAM).rxwidget

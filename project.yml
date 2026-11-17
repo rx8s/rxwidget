@@ -1,0 +1,67 @@
+name: RxWidget
+
+options:
+  bundleIdPrefix: com.rx8s
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+
+configFiles:
+  Debug: Config/Signing.xcconfig
+  Release: Config/Signing.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "26.0"
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_HARDENED_RUNTIME: YES
+
+targets:
+  RxWidget:
+    type: application
+    platform: macOS
+    sources:
+      - path: App
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).rxwidget
+        PRODUCT_NAME: RxWidget
+        CODE_SIGN_ENTITLEMENTS: App/RxWidget.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: RxWidget
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
+        LSUIElement: true
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        RXAppGroupID: $(APP_GROUP_ID)
+    dependencies:
+      - target: RxWidgetExtension
+        embed: true
+
+  RxWidgetExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: Widget
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BUNDLE_ID_PREFIX).rxwidget.widget
+        PRODUCT_NAME: RxWidgetExtension
+        CODE_SIGN_ENTITLEMENTS: Widget/RxWidgetExtension.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: RxWidget
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        RXAppGroupID: $(APP_GROUP_ID)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
