@@ -6,6 +6,7 @@
 ## [Unreleased]
 
 ### เพิ่ม
+- 2026-11-17: บันทึกผล spike iOS: Personal Team ลงทะเบียน App Group `group.*` และติดตั้งแอป + widget บน iPhone ได้ (ข้อมูลยังเป็นข้อมูลทดสอบ)
 - 2026-11-17: Spike iOS ทดสอบแอป + widget บน iPhone กับ Personal Team
   - target `RxWidgetiOS` / `RxWidgetiOSExtension` (iOS 26.0 ขึ้นไป, iPhone อย่างเดียว) ใน `project.yml`
   - App Group ฝั่ง iOS `group.com.rx8s.rxwidget` (`APP_GROUP_ID_IOS` ใน `Config/Signing.xcconfig`) เพราะ iOS บังคับให้ขึ้นต้นด้วย `group.`

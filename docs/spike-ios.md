@@ -33,12 +33,14 @@ widget iOS ใช้โค้ดเดียวกับ Mac (`Widget/RxWidgetBu
 
 | ข้อ | ผลที่ต้องการ | ผลจริง |
 |---|---|---|
-| Xcode ลงทะเบียน App Group `group.*` ด้วย Personal Team ได้ | ไม่มี error ใน Signing & Capabilities | |
-| sign + ติดตั้งทั้งแอปและ widget | ติดตั้งได้ | |
+| Xcode ลงทะเบียน App Group `group.*` ด้วย Personal Team ได้ | ไม่มี error ใน Signing & Capabilities | ✅ (2026-11-17) |
+| sign + ติดตั้งทั้งแอปและ widget | ติดตั้งได้ | ✅ |
 | แอปเปิด container ได้ | path ขึ้น | |
 | widget อ่าน snapshot ได้ | แสดง Claude/Codex ทดสอบ | |
 | `reloadAllTimelines()` ทำให้ widget อัปเดต | % เปลี่ยน | |
 | อายุ profile | หมดใน 7 วัน (ต้อง build ใหม่) | |
+
+หมายเหตุ: ตัวเลขในแอป/widget iOS ตอนนี้เป็นข้อมูลทดสอบ จึงไม่ตรงกับ usage จริงบน Mac — ต้องทำการส่งข้อมูลจาก Mac ก่อน
 
 ## ถ้าไม่ผ่าน
 
