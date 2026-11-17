@@ -17,3 +17,4 @@
 
 ### เปลี่ยนแปลง
 - 2026-11-17: ตั้ง `DEVELOPMENT_TEAM = <TEAMID>` (Personal Team) ใน `Config/Signing.xcconfig` → App Group เป็น `<TEAMID>.rxwidget`
+- 2026-11-17: บันทึกผล spike ใน `docs/spike-app-group.md` — sign ผ่าน, host เขียนและ widget อ่าน App Group ได้, reload ทำงาน (เหลือเช็ก prompt สิทธิ์และอายุ profile 7 วัน)

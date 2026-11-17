@@ -22,13 +22,15 @@
 
 | ข้อ | ผลที่ต้องการ | ผลจริง |
 |---|---|---|
-| Xcode sign ทั้ง 2 target ผ่านด้วย Personal Team | ไม่มี error เรื่อง provisioning / App Groups | |
-| host เปิด container ได้ | path ขึ้นใน menu | |
-| ไม่มี prompt "would like to access data from other apps" | ไม่มี | |
-| widget โผล่ในแกลเลอรี | มี | |
-| widget อ่าน snapshot ได้ | แสดง `#n` | |
-| `reloadAllTimelines()` ทำให้ widget อัปเดต | อัปเดตเร็ว | |
-| ปิด/เปิดเครื่องหรือ 7 วันผ่านไป widget ยังทำงาน | ทำงาน (Personal Team profile หมดอายุ 7 วัน?) | |
+| Xcode sign ทั้ง 2 target ผ่านด้วย Personal Team | ไม่มี error เรื่อง provisioning / App Groups | ✅ ผ่าน (2026-11-17) |
+| host เปิด container ได้ | path ขึ้นใน menu | ✅ `~/Library/Group Containers/<TEAMID>.rxwidget` |
+| ไม่มี prompt "would like to access data from other apps" | ไม่มี | รอยืนยัน |
+| widget โผล่ในแกลเลอรี | มี | ✅ |
+| widget อ่าน snapshot ได้ | แสดง `#n` | ✅ แสดง `#8 · 12:03:42` ตรงกับ host |
+| `reloadAllTimelines()` ทำให้ widget อัปเดต | อัปเดตเร็ว | ✅ widget ตรงกับค่าล่าสุดหลังเขียน |
+| ปิด/เปิดเครื่องหรือ 7 วันผ่านไป widget ยังทำงาน | ทำงาน (Personal Team profile หมดอายุ 7 วัน?) | รอทดสอบ (เช็กอีกครั้ง ~2026-11-24) |
+
+**สรุป:** App Group + widget ใช้กับ Personal Team ได้ เดินหน้าทำส่วนอื่นต่อได้
 
 ## ถ้าไม่ผ่าน ให้จดไว้
 
